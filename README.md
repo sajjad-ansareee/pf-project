@@ -83,43 +83,7 @@ Notes:
 - The two builds are independent. Building one does not affect the other, and you can have both executables at once.
 - If you change a `.c` or `.h` file, run the same `make` command again to rebuild.
 
-### Installing raylib (for the GUI only)
 
-Tested with raylib 5.5 on Ubuntu / Pop!_OS. Build it from source:
-
-```bash
-sudo apt install build-essential git libasound2-dev libx11-dev libxrandr-dev \
-     libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev
-git clone --depth 1 --branch 5.5 https://github.com/raysan5/raylib.git
-cd raylib/src
-make PLATFORM=PLATFORM_DESKTOP
-sudo make install
-```
-
-Then, in this project's folder:
-
-```bash
-make gui
-./main
-```
-
-If you did not run `sudo make install`, point the build at the raylib folder instead:
-
-```bash
-make gui RAYLIB_INC=-I$HOME/raylib/src RAYLIB_LIB=-L$HOME/raylib/src
-```
-
-### Troubleshooting
-
-| Problem | Fix |
-|---|---|
-| `undefined reference to 'board_create'` (or similar) when compiling by hand | You left out some `.c` files. Use `make`, which lists them all. |
-| `raylib.h: No such file or directory` | raylib is not installed. Install it, or pass `RAYLIB_INC` / `RAYLIB_LIB` as shown above. |
-| `cannot find -lraylib` | Same as above: add `RAYLIB_LIB=-L/path/to/raylib/src`. |
-| GUI runs but there is no sound | No audio device was found (the game logs a warning and continues silently). Check your sound output and that `libasound2-dev` was installed before building raylib. Press **M** to make sure you have not muted it. |
-| Terminal colours look like garbage characters | Your terminal does not support ANSI escape codes. Use a modern terminal. |
-
-Only Linux has been tested. The terminal version uses ANSI codes. The Makefile links the Linux raylib libraries (`-lGL -lX11 ...`), so building the GUI on Windows or macOS needs those flags changed.
 
 ## How the computer plays
 
