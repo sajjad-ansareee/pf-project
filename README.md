@@ -5,8 +5,8 @@ It comes in two versions that share the same game code:
 
 | Version | Interface | Sound | Build command | Run |
 |---|---|---|---|---|
-| **Terminal** | text, ANSI colours | no | `make` | `./battleship` |
-| **GUI** | graphical window ([raylib](https://www.raylib.com/)) | yes | `make gui` | `./main` |
+| **Terminal** | text, ANSI colours | no | `make terminal` | `./terminal` |
+| **GUI** | graphical window ([raylib](https://www.raylib.com/)) | yes | `make gui` | `./gui` |
 
 Made as a Programming Fundamentals term project.
 
@@ -69,20 +69,30 @@ You need a C compiler (`gcc` or `cc`) and `make`. The terminal version needs not
 
 ### Which `make` command builds what
 
-| Command | What it does | Output |
+You must say which version you want. Plain `make` builds nothing and prints an error.
+
+| Command | What it does | Run it with |
 |---|---|---|
-| `make` | Builds the **terminal** version (the default target) | `./battleship` |
-| `make battleship` | Same as above, named explicitly | `./battleship` |
-| `make gui` | Builds the **GUI version with sound** (needs raylib) | `./main` |
-| `make main` | Same as `make gui` | `./main` |
-| `make clean` | Deletes `battleship` and `main` | none |
+| `make terminal` | Builds the **terminal** version | `./terminal` |
+| `make gui` | Builds the **GUI version with sound** (needs raylib) | `./gui` |
+| `make clean` | Deletes the `terminal` and `gui` executables | none |
+| `make` (nothing else) | **Error**: asks you to choose `terminal` or `gui` | none |
+
+What plain `make` prints:
+
+```
+Error: choose which version to build.
+  make terminal   builds the terminal version -> run ./terminal
+  make gui        builds the GUI version      -> run ./gui
+  make clean      removes both executables
+```
 
 Notes:
 
 - **Sound is part of the GUI build.** There is no separate sound build. `sound.c` is compiled into `make gui`, and the terminal version has no sound.
 - The two builds are independent. Building one does not affect the other, and you can have both executables at once.
 - If you change a `.c` or `.h` file, run the same `make` command again to rebuild.
-
+- Older versions of this project built executables named `battleship` and `main`. They are no longer produced, so you can delete them by hand.
 
 
 ## How the computer plays
@@ -108,7 +118,7 @@ In a simulation of 5,000 games against random fleets it sank a whole fleet in ab
 | `input.c`, `ui.c` | Terminal input and screen drawing |
 | `gui.c` | The **GUI** version: all screens, mouse input and animations (raylib) |
 | `sound.c`, `sound.h` | Sound effects, generated in code (raylib audio) |
-| `Makefile` | Build rules for both versions |
+| `Makefile` | Build rules: `make terminal` and `make gui` |
 | `leaderboard.txt` | Created at runtime in the folder you run the game from |
 
 The game logic (`board.c`, `ai.c`, `score.c`, `battleship.c`) is shared, so the rules behave identically in both versions. The GUI is built with `ui.c` and `input.c` for linking reasons only. It never calls them.
